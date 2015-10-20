@@ -39,7 +39,7 @@
 <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
 <script>
     $( document ).ready( function(){
-
+        var server  = "http://127.0.0.1";
         $( "#submit" ).on( "click", function(){
             $.ajax({
                 type:"POST",
@@ -51,7 +51,9 @@
                     sex: "M",
                     content : "열심히 하겠습니다."
                 },
-                contentType: "appllication/x-www-form-urlencoded",
+                //contentType: "appllication/x-www-form-urlencoded",
+                contentType: "JSON",
+
                 crossDomain: true
             }).done( function( res ){
                 console.log( res );

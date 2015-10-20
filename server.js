@@ -4,10 +4,12 @@ var app = express();
 var server = require('http').createServer(app);
 var mongojs = require('mongojs');
 var db = mongojs('hostingServer');
-
+var cors = require('cors')
+var bodyParser = require("body-parser");
 
 var survey = db.collection('survey');
-
+app.use(cors());
+app.use(bodyParser.urlencoded({ extended: false }));
 app.all( '/*', function (req, res, next) {
     // Website you wish to allow to connect
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -27,10 +29,10 @@ app.all( '/*', function (req, res, next) {
 app.get('/', function (req, res) {
     res.sendfile(__dirname + '/index.html');
 });
-
-app.use( express.bodyParser() );
 app.post('/registerSurvey', function( req, res ){
     console.log("start");
+    console.log( req.body );
+    console.log( req.data );
     var data = {
         name: req.body.name,
         age: req.body.age,
