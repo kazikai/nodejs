@@ -1,0 +1,66 @@
+ <!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>Survey Example</title>
+    <style type="text/css">
+     .input-box{
+        padding: 8px;
+     }
+    </style>
+</head>
+<body>
+<div>
+    <div class="input-box">
+        <label for="name">이름</label>
+        <input type="text" id="name" name="name" placeholder="이름을 입력하세요" maxlength="3">
+    </div>
+    <div class="input-box">
+        <label for="age">나이</label>
+        <input type="number" id="age" name="age" placeholder="나이를 입력하세요">
+    </div>
+    <div class="input-box">
+        <label for="male">남자</label>
+        <input type="radio" id="male" name="sex" checked>
+        <label for="female">여</label>
+        <input type="radio" id="female" name="sex">
+    </div>
+    <div class="input-box">
+        <label for="content" style="display:block;"> 설문 내용 </label>
+        <input type="text" id="content" placeholde="설문 내용 ">
+    </div>
+    <div class="input-box">
+        <button type="button" id="submit">등록하기</button>
+    </div>
+    <div class="input-box">
+        <a href="list.html"> 설문 내용 확인하기 </a>
+    </div>
+</div>
+<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+<script>
+    $( document ).ready( function(){
+
+        $( "#submit" ).on( "click", function(){
+            $.ajax({
+                type:"POST",
+                url: server + ":8888" + "/registerSurvey",
+                dataType:"json",
+                data:{
+                    name :"한정현",
+                    age: "32",
+                    sex: "M",
+                    content : "열심히 하겠습니다."
+                },
+                contentType: "appllication/x-www-form-urlencoded",
+                crossDomain: true
+            }).done( function( res ){
+                console.log( res );
+                alert( "등록 성공 " );
+            }).fail( function( res ){
+                alert( "error")
+            });
+        });
+    });
+</script>
+</body>
+</html>
