@@ -8,8 +8,10 @@ var cors = require('cors')
 var bodyParser = require("body-parser");
 
 var survey = db.collection('survey');
+
 app.use(cors());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 app.all( '/*', function (req, res, next) {
     // Website you wish to allow to connect
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -25,22 +27,20 @@ app.all( '/*', function (req, res, next) {
     next();
 });
 
-
 app.get('/', function (req, res) {
     res.sendfile(__dirname + '/index.html');
 });
 app.post('/registerSurvey', function( req, res ){
-    console.log("start");
+    console.log("registerSurvey called");
     console.log( req.body );
-    console.log( req.data );
     var data = {
         name: req.body.name,
         age: req.body.age,
         sex: req.body.sex,
         content: req.body.content
     };
-    console.log("registerSurvey called");
-    console.log("이름:" + data.name );
+    console.log( "data" );
+    console.log( data );
     survey.save( data );
     res.send( {
         status: "success",
