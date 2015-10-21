@@ -1,0 +1,44 @@
+ <!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>Survey Example</title>
+    <style type="text/css">
+     .input-box{
+        padding: 8px;
+     }
+    </style>
+</head>
+<body>
+<div>
+    <div id="main"></div>
+</div>
+<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+<script>
+    $( document ).ready( function(){
+        var server  = "http://127.0.0.1";
+        var makeLi = function( key, value ){
+            return $( "<li>" ).html( key + ":" + value );
+        };
+        var $main = $( "#main" );
+        $.ajax({
+            type:"GET",
+            url: server + ":8888" + "/searchAll"
+        }).done( function( res ){
+            console.log( res );
+            res.forEach( function( v ){
+                var $ul = $( "<ul>" );
+                $ul.append( makeLi( "이름", v.name ) );
+                $ul.append( makeLi( "나이", v.age ) );
+                $ul.append( makeLi( "성별", v.sex ) );
+                $ul.append( makeLi( "설문내용", v.content ) );
+                $main.append( $ul );
+            });
+        }).fail( function( res ){
+            alert( "error")
+        });
+
+    });
+</script>
+</body>
+</html>

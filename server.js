@@ -2,7 +2,7 @@ var express = require('express');
 var app = express();
 
 var mongojs = require('mongojs');
-var db = mongojs('hostingServer');
+var db = mongojs('127.0.0.1:12700/hostingServer');
 var cors = require('cors')
 var bodyParser = require("body-parser");
 
@@ -13,21 +13,8 @@ var multer = require('multer'); // v1.0.5
 var upload = multer(); // for parsing multipart/form-data
 
 app.use(cors());
-app.use(bodyParser()); // support json encoded bodies
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
-app.param('name', function(req, res, next, name) {
-
-    // check if the user with that name exists
-    // do some validations
-    // add -dude to the name
-    var modified = name + '-dude';
-
-    // save name to the request
-    req.name = modified;
-
-    next();
-});
 app.all( '/*', function (req, res, next) {
     // Website you wish to allow to connect
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -45,6 +32,9 @@ app.all( '/*', function (req, res, next) {
 
 app.get('/', function (req, res) {
     res.sendFile(__dirname + '/index.html');
+});
+app.get('/list', function (req, res) {
+    res.sendFile(__dirname + '/list.html');
 });
 app.post('/registerSurvey', upload.array(), function( req, res ){
     console.log("registerSurvey called");
@@ -66,6 +56,12 @@ app.post('/registerSurvey', upload.array(), function( req, res ){
         content: data.content
     });
 });
+app.get('/searchAll', function( req, res ){
+    console.log("searchAll");
+    survey.find({}).sort({name:1}, function(err,docs){
+        res.send( docs );
+    });
+});
 app.get('/removeSurvey/:name/:age', function( req, res ){
     console.log("remove");
     survey.remove( {age: req.params.age, name: req.params.name }, function( err, docs ){
@@ -79,9 +75,6 @@ app.get('/findContent', function( req, res ){
         res.send( docs );
     });
 });
-
-
-
 app.get('/findResponse/:name', function( req,res ){
     console.log("findRespons api called");
     var name = req.params.name;

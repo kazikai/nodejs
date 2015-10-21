@@ -13,11 +13,11 @@
 <div>
     <div class="input-box">
         <label for="name">이름</label>
-        <input type="text" id="name" name="name" placeholder="이름을 입력하세요" maxlength="3">
+        <input type="text" id="name" name="name" placeholder="이름을 입력하세요" maxlength="5" value="홍길동">
     </div>
     <div class="input-box">
         <label for="age">나이</label>
-        <input type="number" id="age" name="age" placeholder="나이를 입력하세요">
+        <input type="number" id="age" name="age" placeholder="나이를 입력하세요" value="32">
     </div>
     <div class="input-box">
         <label for="male">남자</label>
@@ -27,13 +27,16 @@
     </div>
     <div class="input-box">
         <label for="content" style="display:block;"> 설문 내용 </label>
-        <input type="text" id="content" placeholde="설문 내용 ">
+        <input type="text" id="content" placeholde="설문 내용 " value="기본내용">
     </div>
     <div class="input-box">
         <button type="button" id="submit">등록하기</button>
     </div>
     <div class="input-box">
-        <a href="list.html"> 설문 내용 확인하기 </a>
+        <button type="button" id="search">조회하기</button>
+    </div>
+    <div class="input-box">
+        <a href="list"> 설문 내용 확인하기 </a>
     </div>
 </div>
 <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
@@ -41,24 +44,26 @@
     $( document ).ready( function(){
         var server  = "http://127.0.0.1";
         $( "#submit" ).on( "click", function(){
+            var data = {
+                name: $( "#name" ).val(),
+                age: $( "#age" ).val(),
+                sex: $( "#male" ).prop( "checked" ) ?  "M" : "F",
+                content: $( "#content" ).val()
+            };
             $.ajax({
                 type:"POST",
                 url: server + ":8888" + "/registerSurvey",
-                data: JSON.stringify({
-                    name :"한정현",
-                    age: "32",
-                    sex: "M",
-                    content : "열심히 하겠습니다."
-                }),
+                data: JSON.stringify( data ),
                 contentType: "application/json",
                 crossDomain: true
             }).done( function( res ){
                 console.log( res );
-                alert( "등록 성공 " );
+                alert( res.name + " 등록 성공!" );
             }).fail( function( res ){
                 alert( "error")
             });
         });
+
     });
 </script>
 </body>
