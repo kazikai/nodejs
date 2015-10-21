@@ -1,7 +1,6 @@
 var express = require('express');
 var app = express();
 
-var server = require('http').createServer(app);
 var mongojs = require('mongojs');
 var db = mongojs('hostingServer');
 var cors = require('cors')
@@ -9,9 +8,25 @@ var bodyParser = require("body-parser");
 
 var survey = db.collection('survey');
 
+
+var multer = require('multer'); // v1.0.5
+var upload = multer(); // for parsing multipart/form-data
+
 app.use(cors());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+app.use(bodyParser.json()); // support json encoded bodies
+app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
+app.param('name', function(req, res, next, name) {
+
+    // check if the user with that name exists
+    // do some validations
+    // add -dude to the name
+    var modified = name + '-dude';
+
+    // save name to the request
+    req.name = modified;
+
+    next();
+});
 app.all( '/*', function (req, res, next) {
     // Website you wish to allow to connect
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -28,11 +43,12 @@ app.all( '/*', function (req, res, next) {
 });
 
 app.get('/', function (req, res) {
-    res.sendfile(__dirname + '/index.html');
+    res.sendFile(__dirname + '/index.html');
 });
-app.post('/registerSurvey', function( req, res ){
+app.post('/registerSurvey', upload.array(), function( req, res ){
     console.log("registerSurvey called");
     console.log( req.body );
+    console.log( req.params );
     var data = {
         name: req.body.name,
         age: req.body.age,
@@ -81,7 +97,7 @@ app.get('/findResponse/:name', function( req,res ){
     }
 });
 
-server.listen(8888);
+app.listen(8888);
 
 console.log("Server Listening 8888");
 

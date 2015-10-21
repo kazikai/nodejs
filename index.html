@@ -45,15 +45,14 @@
                 type:"POST",
                 url: server + ":8888" + "/registerSurvey",
                 dataType:"json",
-                data: JSON.stringify({
+                data: {
                     name :"한정현",
                     age: "32",
                     sex: "M",
                     content : "열심히 하겠습니다."
-                }),
-                //contentType: "appllication/x-www-form-urlencoded",
-                contentType: "JSON",
-
+                },
+                contentType: "appllication/x-www-form-urlencoded",
+                //contentType: "JSON",
                 crossDomain: true
             }).done( function( res ){
                 console.log( res );
