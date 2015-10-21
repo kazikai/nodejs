@@ -13,6 +13,7 @@ var multer = require('multer'); // v1.0.5
 var upload = multer(); // for parsing multipart/form-data
 
 app.use(cors());
+app.use(bodyParser()); // support json encoded bodies
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 app.param('name', function(req, res, next, name) {
@@ -48,7 +49,6 @@ app.get('/', function (req, res) {
 app.post('/registerSurvey', upload.array(), function( req, res ){
     console.log("registerSurvey called");
     console.log( req.body );
-    console.log( req.params );
     var data = {
         name: req.body.name,
         age: req.body.age,
